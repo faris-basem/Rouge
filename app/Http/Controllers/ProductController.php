@@ -171,4 +171,46 @@ class ProductController extends Controller
             ]);
         }
     }
+
+    public function search_filter(Request $request){
+        
+        $query = Product::query();
+
+        if ($request->filled('product_name')) {
+            $query->where('product_name', 'like', '%' . $request->product_name . '%');
+        }
+
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->filled('price')) {
+            $query->where('price', '<=', $request->price);
+        }
+
+        if ($request->filled('color_name')) {
+            $query->whereHas('colors', function ($colorQuery) use ($request) {
+                $colorQuery->where('color_name', $request->color_name);
+            });
+        }
+
+        $results = $query->get();
+
+        if ($results->count() > 0) {
+            return response()->json([
+                'message' => 'Data fetched successfully',
+                'code' => 200,
+                'status' => true,
+                'data' => $results
+
+            ]);
+        }else{
+            return response()->json([
+                'message' => 'No data found',
+                'code' => 404,
+                'status' => false
+            ]);
+        }
+    }
+
 }
