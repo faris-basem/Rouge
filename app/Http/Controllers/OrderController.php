@@ -161,4 +161,36 @@ class OrderController extends Controller
             ]);
         }
     }
+
+    public function order_review(Request $request)
+    {
+        $order=Order::where('id',$request->order_id)->with('cart.product','cart.color')->first();
+        $my_cart = Cart::where('order_id', $request->order_id)->get();
+
+        $order->delivery_service=$request->delivery_service;
+        $order->feedback=$request->feedback;
+        $order->save();
+
+        if($my_cart->count() > 0){
+        $arrayData = json_decode($request->products_rate, true);
+
+        foreach ($arrayData as $item) {
+            $cartId = $item['cart_id'];
+            $review = $item['review'];
+
+
+            $cartItem = $my_cart->where('id', $cartId)->first();
+    
+            if ($cartItem) {
+                $cartItem->review = $review;
+                $cartItem->save();
+            }
+        }
+         
+        $my_cart = Cart::where('order_id', $request->order_id)->get();
+        return response()->json([
+            'code' => 200,
+            'message' => 'ٌReview Submitted Successfully',
+        ]);
+    }}
 }

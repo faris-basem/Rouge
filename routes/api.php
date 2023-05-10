@@ -2,7 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\WelcomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +48,12 @@ Route::get('place_order','App\Http\Controllers\OrderController@place_order');
 Route::get('OnProgressOrders', [OrderController::class, 'OnProgressOrders']);
 Route::get('CompletedOrders', [OrderController::class, 'CompletedOrders']);
 Route::post('order_by_id', [OrderController::class, 'order_by_id']);
+Route::post('order_review','App\Http\Controllers\OrderController@order_review');
+
+Route::get('wellcome', 'App\Http\Controllers\WelcomeController@wellcom');
+Route::get('banner', [WelcomeController::class, 'banner']);
+Route::get('privacy', [WelcomeController::class, 'privacy']);
+Route::get('about_us', [WelcomeController::class, 'about_us']);
 
 Route::post('search','App\Http\Controllers\ProductController@search');
 Route::post('add_to_white_list','App\Http\Controllers\ProductController@add_white_list');
