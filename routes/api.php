@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,15 @@ Route::get('all_categories_with_products','App\Http\Controllers\ProductControlle
 Route::post('get_category_by_id','App\Http\Controllers\ProductController@get_category_by_id');
 Route::post('search_in_category','App\Http\Controllers\ProductController@search_in_category');
 Route::post('search_filter','App\Http\Controllers\ProductController@search_filter');
+
+Route::post('add_to_cart','App\Http\Controllers\CartController@add_to_cart');
+Route::get('my_cart','App\Http\Controllers\CartController@my_cart');
+
+Route::post('checkout','App\Http\Controllers\OrderController@checkout');
+Route::get('place_order','App\Http\Controllers\OrderController@place_order');
+Route::get('OnProgressOrders', [OrderController::class, 'OnProgressOrders']);
+Route::get('CompletedOrders', [OrderController::class, 'CompletedOrders']);
+Route::post('order_by_id', [OrderController::class, 'order_by_id']);
 
 Route::post('search','App\Http\Controllers\ProductController@search');
 Route::post('add_to_white_list','App\Http\Controllers\ProductController@add_white_list');

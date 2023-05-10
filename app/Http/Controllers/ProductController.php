@@ -76,7 +76,12 @@ class ProductController extends Controller
     {
         $product = Product::with('category:id,category_name')->find($request->id);
         if ($product) {
-            $pc = Color::where('product_id', $request->id)->get('color_name');
+            // $pc = Color::where('product_id', $request->id)->get('color_name');
+            // $pc = $product->colors()->pluck('color_name');
+            $pc = $product->colors()->pluck('color_name', 'color_id')->map(function ($colorName, $colorId) {
+                return ['color_name' => $colorName, 'color_id' => $colorId];
+            })->values();
+
             $pimg = ProductImage::where('product_id', $request->id)->get('img');
             $same_p = Product::where('category_id', $product->category_id)->where('id', '!=', $request->id)->get(['id','img', 'product_name', 'price']);
             $product->category_name = $product->category->category_name;
@@ -173,7 +178,7 @@ class ProductController extends Controller
     }
 
     public function search_filter(Request $request){
-        
+
         $query = Product::query();
 
         if ($request->filled('product_name')) {
